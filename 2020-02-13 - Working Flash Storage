@@ -1,0 +1,96 @@
+#include <FlashStorage.h>
+ 
+//create a new variable that includes temperature and pressure data
+typedef struct {
+  bool valid;
+  int iteration = 0;
+  float temp[11];
+  float pressure[11];
+} Data_collection;
+ 
+// initialize the new variable and call it data
+Data_collection wdata;
+Data_collection rdata;
+ 
+int iteration = 1;
+
+ 
+// initialize a flash storage element and call it flash and make the variable type Data_collection
+FlashStorage(flash, Data_collection);
+ 
+void setup() {
+  Serial.begin(9600);
+  while(!Serial);
+
+  Data_In();
+  Store_Data();
+  Read_Data();
+
+}
+ 
+void loop() {
+ 
+}
+ 
+void Data_In() {
+  
+  while(iteration <= 11) {
+    Serial.print("Iteration is: ");
+    Serial.println(iteration);
+    wdata.temp[iteration] = analogRead(A2);
+    Serial.print("Temp is: ");
+    Serial.println(wdata.temp[iteration]);
+    
+    wdata.pressure[iteration] = analogRead(A3);
+    Serial.print("Pressure is: ");
+    Serial.println(wdata.pressure[iteration]);
+    Serial.println();
+    
+    iteration = iteration + 1;
+
+       /*if(iteration = 10){
+        flash.write(wdata);
+        break;
+        } */
+  }
+    Serial.print("Read Iteration is: ");
+    Serial.println(iteration);
+    Serial.println("Data is Read");
+    Serial.println();
+    iteration = 1;
+}
+
+void Store_Data () {
+  if(iteration = 12) {
+
+    flash.write(wdata);
+    
+    
+  }
+    Serial.print("Store Iteration is: ");
+    Serial.println(iteration);
+    Serial.println("Data is Stored");
+    Serial.println();
+    iteration = 1;
+}
+
+void Read_Data() {
+    Serial.println("Reading Data");
+    
+    rdata = flash.read();
+    
+    while(iteration <= 11) {
+     Serial.print("Output Iteration: ");
+     Serial.println(iteration);
+     Serial.print(rdata.temp[iteration]);
+     Serial.print("\t");
+     Serial.println(rdata.pressure[iteration]);
+     Serial.println();
+   
+
+      iteration = iteration + 1;
+    }   
+    Serial.print("Print Iteration is: ");
+    Serial.println(iteration); 
+    Serial.println();
+}
